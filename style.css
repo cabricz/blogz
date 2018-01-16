@@ -1,0 +1,12 @@
+.error {
+    color: red;
+}
+ul {
+    list-style-type: none;
+}
+h1 {
+    text-align: center;
+}
+a {
+    margin-right: 20px;
+}
