@@ -1,20 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        .error {
-            color: red;
-        }
-        ul {
-            list-style-type: none;
-        }
-        h1 {
-            text-align: center;
-        }
-        a {
-            margin-right: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href={{url_for('static', filename='style.css')}}>
     <meta charset="UTF-8">
     <title>Build a Blog</title>
 </head>
@@ -23,7 +10,6 @@
         <a href="/blog">Main Blog Page</a>
         <a href="/newpost">Add a Blog Entry</a>
     </nav>
-    <h1>Build a Blog</h1>
     {% with messages = get_flashed_messages(with_categories=True) %}
         <ul>
         {% for category, message in messages %}

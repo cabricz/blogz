@@ -24,8 +24,13 @@ def index():
 
 @app.route("/blog")
 def blog():
-    blog = Blog.query.all()
-    return render_template("blog.html", blog=blog)
+    id = request.args.get("id")
+    if id:
+        blog = Blog.query.filter_by(id=id).all()
+        return render_template("blog.html", blog=blog)
+    else:
+        blog = Blog.query.all()
+        return render_template("blog.html", blog=blog)
 
 @app.route("/newpost", methods=["POST", "GET"])
 def newpost():
@@ -36,7 +41,8 @@ def newpost():
         if title and body:
             db.session.add(Blog(title, body))
             db.session.commit()
-            return redirect("/blog")
+            id = Blog.query.filter_by(title=title,body=body).first()
+            return redirect("/blog?id={0}".format(id.id))
         else:
             flash("Please enter a title and content for your new blog post.", "error")
             return render_template("newpost.html", title=title, body=body)
