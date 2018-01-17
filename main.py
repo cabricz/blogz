@@ -39,10 +39,11 @@ def newpost():
         body = request.form["body"]
 
         if title and body:
-            db.session.add(Blog(title, body))
+            post = Blog(title,body)
+            db.session.add(post)
             db.session.commit()
-            id = Blog.query.filter_by(title=title,body=body).first()
-            return redirect("/blog?id={0}".format(id.id))
+            post_id = str(post.id)
+            return redirect("/blog?id={0}".format(post_id))
         else:
             flash("Please enter a title and content for your new blog post.", "error")
             return render_template("newpost.html", title=title, body=body)
