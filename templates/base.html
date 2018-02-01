@@ -6,9 +6,13 @@
     <title>Build a Blog</title>
 </head>
 <body>
-    <nav>
+    <nav id="blog_menu">
         <a href="/blog">Main Blog Page</a>
         <a href="/newpost">Add a Blog Entry</a>
+    </nav>
+    <nav id="user_menu">
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
     </nav>
     {% with messages = get_flashed_messages(with_categories=True) %}
         <ul>

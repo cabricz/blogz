@@ -7,6 +7,27 @@ from app import db, app
 def index():
     return redirect("/blog")
 
+@app.route("/signup", methods=["POST", "GET"])
+def signup():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        verify = request.form["verify"]
+
+        #validate user input
+
+        new_user = User(username, password)
+        db.session.add(new_user)
+        db.session.commit()
+        session["username"] = username
+
+        return redirect("/newpost")
+    
+    else:
+        return render_template("signup.html")
+
+
+
 @app.route("/blog")
 def blog():
     id = request.args.get("id")
