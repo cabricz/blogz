@@ -18,15 +18,17 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-
         user = User.query.filter_by(username=username).first()
-        if user and user.password == password:
+
+        if not user:
+            flash("Username does not exist.", "error")
+        elif not user.password == password:
+            flash("Incorrect password.", "error")
+        else:
             session["username"] = username
             flash("Logged in", "bold")
             print(session)
             return redirect("/newpost")
-        else:
-            flash("Login failed", "error")
 
     return render_template("login.html")
 
