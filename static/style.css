@@ -18,6 +18,14 @@ nav a {
     margin-right: 20px;
 }
 
+.float-right {
+    float: right;
+}
+
 #user_menu {
+    float: right;
+}
+
+#logout {
     float: right;
 }
