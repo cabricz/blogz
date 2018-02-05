@@ -9,9 +9,35 @@ def isvalid(text):
     else:
         return False
 
+@app.before_request
+def require_login():
+    allowed_routes = ["login", "signup", "index", "blog"]
+    if request.endpoint not in allowed_routes and "username" not in session:
+        return redirect("/login")
+
 @app.route("/")
 def index():
-    return redirect("/blog")
+    user = User.query.all()
+    return render_template("index.html", user=user)
+
+@app.route("/blog")
+def blog():
+    id = request.args.get("id")
+    if id:
+        user = User.query.all()
+        blog = Blog.query.filter_by(id=id).all()
+        return render_template("blog.html", blog=blog, user=user)
+
+    user = request.args.get("user")
+    if user:
+        owner = User.query.filter_by(username=user).first()
+        blog = Blog.query.filter_by(owner=owner).all()
+        return render_template("blog.html", blog=blog, user=user)
+        
+    else:
+        user = User.query.all()
+        blog = Blog.query.all()
+        return render_template("blog.html", blog=blog, user=user)
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -85,24 +111,15 @@ def signup():
     else:
         return render_template("signup.html")
 
-@app.route("/blog")
-def blog():
-    id = request.args.get("id")
-    if id:
-        blog = Blog.query.filter_by(id=id).all()
-        return render_template("blog.html", blog=blog)
-    else:
-        blog = Blog.query.all()
-        return render_template("blog.html", blog=blog)
-
 @app.route("/newpost", methods=["POST", "GET"])
 def newpost():
     if request.method == "POST":
         title = request.form["title"]
         body = request.form["body"]
+        owner = User.query.filter_by(username=session["username"]).first()
 
         if title and body:
-            post = Blog(title,body)
+            post = Blog(title, body, owner.id)
             db.session.add(post)
             db.session.commit()
             post_id = str(post.id)
